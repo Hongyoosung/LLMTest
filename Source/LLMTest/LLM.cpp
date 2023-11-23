@@ -33,13 +33,14 @@ void ALLM::Tick(float DeltaTime)
 // 블루프린트에서 사용할 수 있도록 구현, 입력된 텍스트를 LLN에 전달
 void ALLM::SendTextToLLM(FString UserInput)
 {
+
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 
     Request->           SetURL(TEXT("http://localhost:1234/v1/chat/completions"));
     Request->           SetVerb(TEXT("POST"));
     Request->           SetHeader(TEXT("Content-Type"), TEXT("application/json"));
 
-    FString JsonData    = FString::Printf(TEXT("{ \"messages\": [ { \"role\": \"user\", \"content\": \"%s\" } ], \"stop\": [\"### Instruction:\"], \"temperature\": 0.7, \"max_tokens\": -1, \"stream\": false }"), *UserInput);
+    FString JsonData    = FString::Printf(TEXT("{ \"messages\": [ { \"role\": \"user\", \"content\": \"%s\" } ], \"stop\": [\"### Instruction:\"], \"temperature\": 0.7, \"max_tokens\": -1, \"stream\": true }"), *UserInput);
 
     Request->           SetContentAsString(JsonData);
     Request->           OnProcessRequestComplete().BindUObject(this, &ALLM::OnResponseReceived);
@@ -94,6 +95,8 @@ void ALLM::ParseResponse(FString ResponseR)
                 if (MessageObject.IsValid() && MessageObject->HasField("content"))
                 {
                     FString Response = MessageObject->GetStringField("content");
+
+                    
 
                     UE_LOG(LogTemp, Warning, TEXT("Response: %s"), *Response);
 
