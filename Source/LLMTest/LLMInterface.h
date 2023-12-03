@@ -16,6 +16,8 @@ class ILLMInterface
 
 public:
     virtual void SendTextToLLM(int AgentHealth, int EnemyHealth) = 0;
+    virtual void SendTextToLLM() = 0;
     virtual FString GetResponse() const = 0;
     virtual void SetOnResponseReadyCallback(TFunction<void()> Callback) = 0;
+    virtual bool IsFirstRequest() = 0;
 };

@@ -31,6 +31,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "LLM")
 	void SendTextToLLM(int AgentHealth, int EnemyHealth);
+	void SendTextToLLM();
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetOnResponseReadyCallback(TFunction<void()> Callback) override;
@@ -38,13 +39,14 @@ public:
 	
 	void OnResponseReceived(FHttpRequestPtr, FHttpResponsePtr, bool);
 	void ParseResponse(FString);
+	bool IsFirstRequest();
 
 
 protected:
 	virtual void BeginPlay() override;
 
 public:	
-	
+	bool bFirstRequest;
 
 private:
 	TFunction<void()> OnResponseReadyCallback;

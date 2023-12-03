@@ -32,23 +32,16 @@ void AAgent::BeginPlay()
 
 	if (LLMInstance)
 	{
-		
 		LLMInstance->SetOnResponseReadyCallback([this]() {
 			FString Action = LLMInstance->GetResponse();
+			UE_LOG(LogTemp, Warning, TEXT("Response Action: %s"), *Action);
 			PerformAction(Action);
-
-			
-			PerformActionFromLLM();
 			});
 
-		
+		// Start the loop by sending the first message to LLM
 		PerformActionFromLLM();
 	}
 }
-
-
-
-
 
 void AAgent::Tick(float DeltaTime)
 {
@@ -59,43 +52,46 @@ void AAgent::PerformAction(FString Action)
 {
 	AActor* Target = UGameplayStatics::GetActorOfClass(GetWorld(), ATarget::StaticClass());
 
-
 	if (Target)
 	{
-		if (!Target)
+		/*if (!Target)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Target is not found."));
 			return;
 		}
 
-		if (Action.Contains("Attack") || Action.Contains("ack"))
+		if (Action.Contains("attack"))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Action: Attack"));
 			MoveTowardsTarget(Target);
 		}
-		else if (Action.Contains("Flee") || Action.Contains("lee"))
+		else if (Action.Contains("flee"))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Action: Flee"));
 			MoveAwayFromTarget(Target);
-		}
+		}*/
+		
 	}
+
+	// Action has been performed, request next action from LLM
+	PerformActionFromLLM();
 }
 
 
 void AAgent::PerformActionFromLLM()
 {
+	
 	AgentHealth = FMath::RandRange(0, 100);
 	EnemyHealth = FMath::RandRange(0, 100);
-	UE_LOG(LogTemp, Warning, TEXT("Agent Health: %d, Enemy Health: %d"), AgentHealth, EnemyHealth);
+
 	if (LLMInstance)
 	{
 		LLMInstance->SendTextToLLM(AgentHealth, EnemyHealth);
 
-		// Get the response and perform the action
-		FString Action = LLMInstance->GetResponse();
-		PerformAction(Action);
 	}
+	
 }
+
 
 
 void AAgent::MoveTowardsTarget(AActor* Target)
