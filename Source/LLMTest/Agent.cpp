@@ -54,22 +54,22 @@ void AAgent::PerformAction(FString Action)
 
 	if (Target)
 	{
-		/*if (!Target)
+		if (!Target)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Target is not found."));
 			return;
 		}
 
-		if (Action.Contains("attack"))
+		if (Action.Contains("attack") || Action.Contains("ack"))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Action: Attack"));
 			MoveTowardsTarget(Target);
 		}
-		else if (Action.Contains("flee"))
+		else if (Action.Contains("flee") || Action.Contains("lee"))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Action: Flee"));
 			MoveAwayFromTarget(Target);
-		}*/
+		}
 		
 	}
 
