@@ -35,7 +35,7 @@ void ALLM::SendTextToLLM(int AgentHealth, int EnemyHealth)
 
     // OpenAI API 키를 헤더에 추가합니다.
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-    Request->SetHeader(TEXT("Authorization"), TEXT("Bearer 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"));
+    Request->SetHeader(TEXT("Authorization"), TEXT("Bearer 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"));
 
     FString JsonData;
     
