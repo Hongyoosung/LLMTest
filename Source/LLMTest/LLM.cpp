@@ -28,12 +28,12 @@ void ALLM::SendTextToLLM(int AgentHealth, int EnemyHealth)
     //UE_LOG(LogTemp, Warning, TEXT("Agent Health: %d, Enemy Health: %d"), AgentHealth, EnemyHealth);
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 
-    // OpenAIÀÇ API ¼­¹ö URL·Î º¯°æÇÕ´Ï´Ù.
+    // OpenAIì˜ API ì„œë²„ URLë¡œ ë³€ê²½.
     Request->SetURL(TEXT("https://api.openai.com/v1/chat/completions"));
 
     Request->SetVerb(TEXT("POST"));
 
-    // OpenAI API Å°¸¦ Çì´õ¿¡ Ãß°¡ÇÕ´Ï´Ù.
+    // OpenAI API í‚¤ë¥¼ í—¤ë”ì— ì¶”ê°€.
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     Request->SetHeader(TEXT("Authorization"), TEXT("Bearer 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"));
 
@@ -53,11 +53,11 @@ void ALLM::SendTextToLLM()
 {
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 
-    // OpenAIÀÇ API ¼­¹ö URL·Î º¯°æÇÕ´Ï´Ù.
+    // OpenAIì˜ API ì„œë²„ URLë¡œ ë³€ê²½.
     Request->SetURL(TEXT("https://api.openai.com/v1/chat/completions"));
     Request->SetVerb(TEXT("POST"));
 
-    // OpenAI API Å°¸¦ Çì´õ¿¡ Ãß°¡ÇÕ´Ï´Ù.
+    // OpenAI API í‚¤ë¥¼ í—¤ë”ì— ì¶”ê°€.
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     Request->SetHeader(TEXT("Authorization"), TEXT("Bearer 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"));
 
@@ -123,28 +123,28 @@ void ALLM::ParseResponse(FString ResponseR)
 
     TArray<TSharedPtr<FJsonValue>> Choices = JsonObject->GetArrayField(TEXT("choices"));
 
-    // 'choices' ¾ÈÀÇ °¢ °´Ã¼¸¦ ¼øÈ¸ÇÕ´Ï´Ù.
+    // 'choices' ì•ˆì˜ ê° ê°ì²´ë¥¼ ìˆœíšŒ.
     for (TSharedPtr<FJsonValue> Choice : Choices)
     {
         TSharedPtr<FJsonObject> ChoiceObject = Choice->AsObject();
 
-        // °¢ °´Ã¼¿¡¼­ 'message' °´Ã¼¸¦ Ã£½À´Ï´Ù.
+        // ê° ê°ì²´ì—ì„œ 'message' ê°ì²´ë¥¼ ì°¾ëŠ”ë‹¤.
         if (ChoiceObject->HasField("message"))
         {
             TSharedPtr<FJsonObject> Message = ChoiceObject->GetObjectField("message");
 
-            // 'role'ÀÌ 'assistant'ÀÎ ¸Ş½ÃÁö¸¦ Ã£½À´Ï´Ù.
+            // 'role'ì´ 'assistant'ì¸ ë©”ì‹œì§€ë¥¼ ì°¾ëŠ”ë‹¤.
             if (Message->GetStringField("role").Equals("assistant"))
             {
-                // 'assistant' ¸Ş½ÃÁö¿¡¼­ 'content' ÇÊµå¸¦ Ã£½À´Ï´Ù.
+                // 'assistant' ë©”ì‹œì§€ì—ì„œ 'content' í•„ë“œë¥¼ ì°¾ëŠ”ë‹¤.
                 FString Content = Message->GetStringField("content").TrimStartAndEnd();
 
-                // ÁÙ¹Ù²Ş ¹®ÀÚ¸¦ Á¦°ÅÇÕ´Ï´Ù.
+                // ì¤„ë°”ê¿ˆ ë¬¸ìë¥¼ ì œê±°í•œë‹¤.
                 Content = Content.Replace(TEXT("\n"), TEXT(""));
 
                     ResponseContent = Content;
 
-                // 'content' ÇÊµåÀÇ °ªÀ» Ãâ·ÂÇÕ´Ï´Ù.
+                // 'content' í•„ë“œì˜ ê°’ì„ ì¶œë ¥í•œë‹¤.
                 //UE_LOG(LogTemp, Warning, TEXT("Content: %s"), *Content);
             }
         }
